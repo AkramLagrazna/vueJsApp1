@@ -1,0 +1,36 @@
+<!-- Web-Based Mobile Applications -->
+<!-- Akram Lagrazna -->
+<html>
+<head>
+    <title>After School Club</title> 
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+    <header>
+        <h1 v-text="sitename">
+            </h1>
+    </header>
+    <input type="button" value="Checkout" v-if="canShowCart" v-on:click='showCheckout'> </input>
+    <div v-if="showProduct">
+        <main style='padding: center;'>
+        <img v-bind:src="product.image" width="150px" height="150px">
+        <h2 v-text="product.subject">
+        </h2>
+        <p v-text="product.location">
+        </p>
+        <p>Price: {{product.price}}</p>
+        <p> Number of Spaces: {{product.spaces}}</p>
+        <input type="button" value="Add to Cart" v-if="canShowAdd" v-on:click='addToCart'> </input>
+    <br />
+</div>
+<div v-else>
+    <p>BASKET PAGE</p>
+</div>
+    <script src="lessons.js"></script>
+</main>
+</div>
+</body>
+
+</html>
