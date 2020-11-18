@@ -12,8 +12,10 @@
         <h1 v-text="sitename">
             </h1>
     </header>
-    <input type="button" value="Checkout" v-if="canShowCart" v-on:click='showCheckout'> </input>
-    <div v-if="showProduct">
+    
+    <div v-if="showProduct.visible">
+        <div id="less">
+            <div v-for="product in products">
         <main style='padding: center;'>
         <img v-bind:src="product.image" width="150px" height="150px">
         <h2 v-text="product.subject">
@@ -22,13 +24,37 @@
         </p>
         <p>Price: {{product.price}}</p>
         <p> Number of Spaces: {{product.spaces}}</p>
-        <input type="button" value="Add to Cart" v-if="canShowAdd" v-on:click='addToCart'> </input>
+        <input type="button" value="Add to Cart" v-if='canAddToCart(product)' v-on:click='addToCart(product)'> </input>
     <br />
+    </div>
+    </div>
+    <input type="button" value="Checkout" v-if="canShowCheckout"  v-on:click='showCheckout'> </input>
+
 </div>
 <div v-else>
-    <p>BASKET PAGE</p>
+    <h2>Basket</h2>
+    <div v-for='product in cart'>
+    <p v-text='product'> {{ product }}</p><input type="button" value="Remove" v-on:click="removeId(product)"></input>
+   
+    <br />
+    </div>
+    <h2>Checkout</h2>
+    <p><strong>Name:</strong>
+    <input pattern="([A-zÀ-ž\s]){2,}" v-model="order.name"/></p>
+    <p><strong>Phone Number:</strong>
+    <input type='number' v-model="order.phoneNumber"/></p>
+    <h2>Order Information</h2>
+    <p>Name:         {{order.name}}</p>
+    <p>Phone Number: {{order.phoneNumber}}</p>
+<br />
+    <button v-if="canCheckout" v-on:click="submitOrder">
+        <span></span> Place Order
+        </button><br />
+        <input type="button" value="Back to Lessons" v-if="canShowBack"  v-on:click='showCheckout'> </input>
+
 </div>
-    <script src="lessons.js"></script>
+<script src="lessons.js"></script>
+<script src="main.js"></script>
 </main>
 </div>
 </body>
