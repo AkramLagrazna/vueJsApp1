@@ -3,19 +3,21 @@
 <html>
 <head>
     <title>After School Club</title> 
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-</head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script></head>
 
-<body>
+
     <div id="app">
+   
     <header>
         <h1 v-text="sitename">
             </h1>
     </header>
     
     <div v-if="showProduct.visible">
-        <div id="less">
-            <div v-for="product in products">
+        <input type="button" value="Sort by Price" v-on:click='showSort'> </input>
+
+        <div v-if="showProduct.showP">
+        <div v-for="product in sortedProducts">
         <main style='padding: center;'>
         <img v-bind:src="product.image" width="150px" height="150px">
         <h2 v-text="product.subject">
@@ -24,12 +26,29 @@
         </p>
         <p>Price: {{product.price}}</p>
         <p> Number of Spaces: {{product.spaces}}</p>
-        <input type="button" value="Add to Cart" v-if='canAddToCart(product)' v-on:click='addToCart(product)'> </input>
-    <br />
-    </div>
-    </div>
-    <input type="button" value="Checkout" v-if="canShowCheckout"  v-on:click='showCheckout'> </input>
+        <input type="button" value="Add to Cart" v-if="canShowAdd(product)" v-on:click='addToCart(product)'> </input>
+    <br /></div>
 
+        </div>
+        <div v-else>
+
+
+        <div v-for="product in sortProducts">
+        <main style='padding: center;'>
+        <img v-bind:src="product.image" width="150px" height="150px">
+        <h2 v-text="product.subject">
+        </h2>
+        <p v-text="product.location">
+        </p>
+        <p>Price: {{product.price}}</p>
+        <p> Number of Spaces: {{product.spaces}}</p>
+        <input type="button" value="Add to Cart" v-if="canShowAdd(product)" v-on:click='addToCart(product)'> </input>
+    <br /></div></div>
+
+
+
+    <input type="button" value="Checkout" v-if="canShowCheckout"  v-on:click='showCheckout'> </input>
+</main>
 </div>
 <div v-else>
     <h2>Basket</h2>
@@ -52,10 +71,11 @@
         </button><br />
         <input type="button" value="Back to Lessons" v-if="canShowBack"  v-on:click='showCheckout'> </input>
 
+
+        
+        <script src="products.js"></script>
+        <script src="main.js"></script>     
 </div>
-<script src="lessons.js"></script>
-<script src="main.js"></script>
-</main>
 </div>
 </body>
 
