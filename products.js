@@ -50,7 +50,7 @@
     {
         "id": 1007,     
         "subject": "Italian",
-        "locatgggion": "London",
+        "location": "London",
         "price": 110,
         "image": "https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg",
         "spaces": 5
