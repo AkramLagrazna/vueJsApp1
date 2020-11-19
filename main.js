@@ -1,9 +1,6 @@
 var webstore = new Vue({ el: '#app', data: 
 {
     sitename: "After School Club",
-    canAddToCart: function(){
-        return;
-    },
     order: {
         name: '',
         phoneNumber: +44
@@ -11,43 +8,44 @@ var webstore = new Vue({ el: '#app', data:
     products: products,
     showProduct:
         {  
-            visible: true
+            visible: true,
+            showP: true
     },
     cart : []
 },
     methods: {
-        canAddToCart: function(product){
-            return product.spaces > this.cart.length(product.id);
-        },
         addToCart: function(product) {
-            if (this.products.spaces == 0) {
-                return;
-            } else {
-            this.products.spaces = this.products.spaces - 1;
+            product.spaces = product.spaces - 1;
             this.cart.push(product.id);
-        }},
+        },
         submitOrder: function() {
             alert('Order Submitted!');
         },        
         showCheckout: function(){
             return this.showProduct.visible = this.showProduct.visible ? false : true;
         },
+        showSort: function(){
+            return this.showProduct.showP = this.showProduct.showP ? false : true;
+        },
         removeId: function(product){
             for (i=0;i< this.cart.length;i++){
                 if (this.cart[i] == product) {
                     this.cart.splice(i,1);
-                    this.products.spaces += 1;
+                    product.spaces = product.spaces + 1;
                     return true;
                 }
             }
         },
+        canShowAdd: function(product){
+            return product.spaces > 0;
+        },
+        chooseSort: function(){
+            return this.showProduct.showP = this.showProduct.showP ? false : true;
+        }
     },
     computed: { 
         cartItemCount: function() { 
         return this.cart.length;
-        },
-        canShowCart: function(product){
-            return product.spaces > this.cartItemCount(product.id);
         },
         canShowBack: function(){
             if (this.showProduct.visible = true) {
@@ -64,6 +62,25 @@ var webstore = new Vue({ el: '#app', data:
         }},
         canShowCheckout: function(){
                 return this.cart.length > 0;
+        },
+        sortedProducts() {
+            function compare(a,b) {
+                if (a.price > b.price) return 1;
+                if (a.price < b.price) return -1;
+                return 0;
+            }
+            return this.products.sort(compare);
+        },
+        sortProducts() {
+            function compare(a,b) {
+                if (a.price < b.price) return 1;
+                if (a.price > b.price) return -1;
+                return 0;
+        }
+            return this.products.sort(compare);
+        },
+        higher: function(){
+
         }
 
     },
