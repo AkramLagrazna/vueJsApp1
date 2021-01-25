@@ -5,15 +5,31 @@ var webstore = new Vue({ el: '#app', data:
         name: '',
         phoneNumber: +44
     },
-    products: products,
+    products: [],
     showProduct:
-        {  
+        {
             visible: true,
             showP: true
     },
     cart : []
 },
+    mounted() {
+        this.$nextTick(() => {
+            this.retrieveLessons();
+        })
+    },
     methods: {
+        retrieveLessons: function() {
+        fetch('http://localhost:3000/api/collection/lessons').then(
+            function (response) {
+                response.json().then(
+                    function (json) {
+                        webstore.products = json;
+                        }
+                    );
+                }
+            )
+        },
         addToCart: function(product) {
             product.spaces = product.spaces - 1;
             this.cart.push(product.id);
@@ -84,7 +100,6 @@ var webstore = new Vue({ el: '#app', data:
         }
 
     },
-
 
 
 
