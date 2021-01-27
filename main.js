@@ -6,6 +6,7 @@ var webstore = new Vue({ el: '#app', data:
         phoneNumber: +44
     },
     products: [],
+    bought: [],
     showProduct:
         {
             visible: true,
@@ -20,7 +21,7 @@ var webstore = new Vue({ el: '#app', data:
     },
     methods: {
         retrieveLessons: function() {
-        fetch('http://localhost:3000/api/collection/lessons').then(
+        fetch('https://cw2webapps.herokuapp.com/api/collection/lessons').then(
             function (response) {
                 response.json().then(
                     function (json) {
@@ -32,10 +33,55 @@ var webstore = new Vue({ el: '#app', data:
         },
         addToCart: function(product) {
             product.spaces = product.spaces - 1;
-            this.cart.push(product.id);
+            this.cart.push(product._id);
         },
         submitOrder: function() {
-            alert('Order Submitted!');
+            const newOrder = {name: this.order.name, phone: this.order.phoneNumber, ordered: this.cart };
+            fetch('https://cw2webapps.herokuapp.com/api/collection/orders', {
+                method: 'POST', headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newOrder), 
+            })
+            .then(response => response.json())
+            .then(responseJSON => {
+                console.log('Success:', responseJSON);
+            });
+            for (p=0;p < this.cart.length;p++){
+                pSpaces = [];
+                fetch('https://cw2webapps.herokuapp.com/api/collection/lessons/'+this.cart[p]).then(
+                    function (response) {
+                        response.json().then(
+                            function (json) {
+                                webstore.bought = json;
+                                }
+                            );
+                        }
+                    )
+                console.log(webstore.bought);
+                nSpace = webstore.bought.spaces - 1;
+                const nData = {
+                    spaces : nSpace
+                    }
+                const upCart = { spaces: this.bought.spaces - 1 };
+                const putMethod = {
+                    method: 'PUT', // Method itself
+                    headers: {
+                     'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
+                    },
+                    body: JSON.stringify(nData) // We send data in JSON format
+                   }
+                   
+                   // make the HTTP put request using fetch api
+                   fetch('https://cw2webapps.herokuapp.com/api/collection/lessons/'+this.cart[p], putMethod)
+                   .then(response => response.json())
+                   .then(data => console.log(data)) // Manipulate the data retrieved back, if we want to do something with it
+                   .catch(err => console.log(err)) // Do something with the error
+                   
+            }
+
+        // Simulate a mouse click:
+        alert('Order Submitted!');
         },        
         showCheckout: function(){
             return this.showProduct.visible = this.showProduct.visible ? false : true;
