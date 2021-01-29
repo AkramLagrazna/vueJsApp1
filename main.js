@@ -35,7 +35,7 @@ var webstore = new Vue({ el: '#app', data:
             product.spaces = product.spaces - 1;
             this.cart.push(product._id);
         },
-        submitOrder: function() {
+        submitOrder: function() {   
             const newOrder = {name: this.order.name, phone: this.order.phoneNumber, ordered: this.cart };
             fetch('https://cw2webapps.herokuapp.com/api/collection/orders', {
                 method: 'POST', headers: {
@@ -48,22 +48,36 @@ var webstore = new Vue({ el: '#app', data:
                 console.log('Success:', responseJSON);
             });
             for (p=0;p < this.cart.length;p++){
-                pSpaces = [];
+                console.log(p);
+                
+                /*
                 fetch('https://cw2webapps.herokuapp.com/api/collection/lessons/'+this.cart[p]).then(
                     function (response) {
                         response.json().then(
                             function (json) {
+                                console.log(json);
                                 webstore.bought = json;
                                 }
                             );
                         }
                     )
-                console.log(webstore.bought);
-                nSpace = webstore.bought.spaces - 1;
+                */
+               mama = 0;
+               mama = this.cart[p];
+               console.log(mama);
+               //console.log(mama);
+                async function fetchJSON() {
+                    const response = await fetch('https://cw2webapps.herokuapp.com/api/collection/lessons/'+mama);
+                    const jaja = await response.json();  return jaja;
+                }
+                
+                fetchJSON().then(jaja => {
+                console.log(mama);
+                nSpace = jaja.spaces - 1;
+                console.log(nSpace);
                 const nData = {
                     spaces : nSpace
                     }
-                const upCart = { spaces: this.bought.spaces - 1 };
                 const putMethod = {
                     method: 'PUT', // Method itself
                     headers: {
@@ -71,17 +85,17 @@ var webstore = new Vue({ el: '#app', data:
                     },
                     body: JSON.stringify(nData) // We send data in JSON format
                    }
-                   
                    // make the HTTP put request using fetch api
-                   fetch('https://cw2webapps.herokuapp.com/api/collection/lessons/'+this.cart[p], putMethod)
+                   fetch('https://cw2webapps.herokuapp.com/api/collection/lessons/'+mama, putMethod)
                    .then(response => response.json())
                    .then(data => console.log(data)) // Manipulate the data retrieved back, if we want to do something with it
                    .catch(err => console.log(err)) // Do something with the error
-                   
-            }
+                    
+                });
 
-        // Simulate a mouse click:
-        alert('Order Submitted!');
+                   
+            };
+            alert('order submitted!');
         },        
         showCheckout: function(){
             return this.showProduct.visible = this.showProduct.visible ? false : true;
